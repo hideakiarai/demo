@@ -15,17 +15,20 @@ class ProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
             $table->string('image_path')->nullable();
             $table->string('user_name');
             $table->string('profession');
             $table->string('country');
             $table->string('self_introduction');
-            $table->timestamp('updated_by');
-            $table->timestamp('updated_at');
-            $table->unsigneInteger('created_by');
-            $table->unsigneInteger('created_at');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            $table->unsignedInteger('created_by')->default(0);
+            $table->unsignedInteger('updated_by')->default(0);
             $table->softDeletes('deleted_at');
+
+            // 外部キー
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
